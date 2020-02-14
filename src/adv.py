@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -22,6 +23,20 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
+items = {
+    'Mjolnir': Item("The Mjolnir", 
+                """The most powerful weapon in the galaxy, too bad you can't pick it up """),
+                    
+    'Basket': Item("Basket of apples ",
+                """feel free to replenish yourself with these random apples, who knows if they're poisonous or not..."""),
+
+    'Fishing pole': Item("The great fishing pole",
+                """If you manage to get this fishing pole out of these caves you will be granted the ability to catch unlimited fish!"""),
+
+    'Knights Sword': Item("The Knights Sword",
+                """Seems as though a Knight came through the caves and lost his trusty sword, I would recommend picking it up! """)
+
+}
 
 # Link rooms together
 
@@ -39,7 +54,10 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
-p1 = Player('outside')
+p1 = Player(input('What is your name?'), room['outside'])
+
+print(f"Hello, {p1.name}\n\n{p1.current_room}")
+
 
 #commands = input("Please enter a direction: 'n', 's', 'e', 'w' or click 'q' to quit. ")
 
@@ -60,24 +78,24 @@ p1 = Player('outside')
 
 # player_cmd = input("Please enter a direction: 'n', 's', 'e', 'w' or click 'q' to quit. ")
 
-directions = ['n', 's', 'e', 'w']
+# directions = ['n', 's', 'e', 'w']
 
-    #While player is outside
 while True: 
-    print('You are currently '+ p1.current_room +'')
-
-    player_cmd = input("Please enter a direction: 'n', 's', 'e', 'w' or click 'q' to quit. ")
-
-    if player_cmd == 'n':
-        p1.current_room == player_cmd + '_to'
-    elif player_cmd == 's':
-        print('This is not a valid option currently')
-    elif player_cmd == 'e':
-        print('This is not a valid option currently')
-    elif player_cmd == 'w':
-        print('This is not a valid option currently')
+    print(p1.current_room)
+    cmd = input("->").lower()
+    if cmd in ["n", "s", "e", "w"]:
+        #Move to that room
+        current_room = p1.current_room
+        next_room = getattr(current_room, f"{cmd}_to")
+        if next_room is not None: 
+            p1.current_room = next_room
+        else: 
+            print("You cannot move in that direction")
+    elif cmd == "q":
+        print("Goodbye!")
+        exit()
     else: 
-        break
+        print("I did not understand that command")
 
 
 
